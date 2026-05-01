@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>umarkin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+     
+
+  <style>
+   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  
+    :root {
+      --bg: #eae9e9;       /* Page background color: plaster (grey) */
+      --text: #202020;     /* Main text color (lead (near black)) */
+      --muted: #2a0813;    /* Secondary text color (crimson black), used in nav links, footer */
+      --link: #202020;     /* Link color (matches text) */
+      --border: #2a0813;   /* Color of thin lines/borders and underlines */
+      --accent: #4d194d;   /* Hover highlight color (burnt orange). Change this to your accent color. */
+    }
+
+
+    html { font-size: 16px; }
+ 
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 1.125rem;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+
+    a {
+      color: var(--link);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-color: var(--border);
+      transition: color 0.15s, text-decoration-color 0.15s;
+    }
+    a:hover {
+      color: var(--accent);
+      text-decoration-color: var(--accent);
+    }
+
+
+    nav {
+      position: fixed;     
+      bottom: 0; left: 0; right: 0;  /* Stretches full width */
+      z-index: 100;                /* Sits on top of all other content */
+      background: var(--bg);       /* Same background as the page */
+      border-bottom: 1px solid var(--border); /* Thin line under nav */
+      display: flex;               /* Puts logo and links side by side */
+      align-items: center;         /* Vertically centers them */
+      justify-content: space-between; /* Logo on left, links on right */
+      padding: 0 1rem;             /* ✏️ Left/right padding inside nav (2rem = 32px) */
+      height: 52px;                /* ✏️ Height of the nav bar */
+    }
+
+    .nav-logo {                         /* The name/logo on the left of the nav */
+      font-family: 'Inter', sans-serif; /* ✏️ Logo font */
+      font-size: 0.85rem;               /* ✏️ Logo text size */
+      font-weight: 500;
+      letter-spacing: 0.01em;           /* Slight spacing between letters */
+      text-decoration: none;            /* No underline on logo */
+      color: var(--text);
+    }
+    .nav-logo:hover { color: var(--accent); text-decoration: none; }
+
+    .nav-links {                  /* The list of links on the right of the nav */
+      display: flex;              /* Links sit side by side */
+      gap: 1.75rem;               /* ✏️ Space between nav links */
+      list-style: none;           /* Remove bullet points */
+    }
+    .nav-links a {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;         /* ✏️ Nav link text size */
+      letter-spacing: 0.02em;
+      text-decoration: none;      /* No underline on nav links */
+      color: var(--muted);        /* Grey color */
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    main {
+      max-width: 740px;           /* ✏️ Maximum width of content. Increase for wider layout. */
+      margin: 0 auto;             /* Centers the content horizontally */
+      padding: 120px 2rem 80px;   /* ✏️ top / left+right / bottom padding.
+                                      120px top = clears the fixed nav bar. */
+    }
+
+
+    .profile {
+      display: flex;              /* Photo and text sit side by side */
+      align-items: flex-start;    /* Align to top */
+      gap: 1.90rem;               /* ✏️ Space between photo and name */
+      margin-bottom: 2.5rem;      /* ✏️ Space below profile section */
+      opacity: 0;                 /* Starts invisible (for fade-in animation) */
+      transform: translateY(14px);/* Starts slightly lower (for fade-in animation) */
+      animation: fadeUp 0.55s ease forwards 0.1s; /* Fades in on page load */
+    }
+
+    .profile-img {
+      width: 72px;                /* ✏️ Photo width */
+      height: 72px;               /* ✏️ Photo height (keep equal to width for circle) */
+      border-radius: 20%;         /* Makes it a circle. Remove for square. */
+      object-fit: cover;          /* Crops photo to fit without stretching */
+      flex-shrink: 0;             /* Prevents photo from shrinking */
+      border: 1px solid var(--border); /* Thin border around photo */
+      background: linear-gradient(135deg, #d4c5b0 0%, #b8a99a 100%); /* Fallback if photo fails to load */
+    }
+
+    .profile-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.6rem;          /* ✏️ Your name font size */
+      font-weight: 500;
+      line-height: 1.3;
+      margin-bottom: 0.15rem;     /* Small gap between name and tagline */
+    }
+
+    .profile-tagline {
+      font-size: 0.95rem;         /* ✏️ Tagline font size */
+      color: var(--muted);        /* Grey */
+      font-style: italic;         /* Italic. Remove this line for normal text. */
+    }
+
+    .bio {
+      opacity: 0;                          /* Starts invisible */
+      transform: translateY(14px);
+      animation: fadeUp 0.55s ease forwards 0.25s; /* Fades in slightly after profile */
+    }
+
+    .bio p {
+      margin-bottom: 1.2rem;      /* ✏️ Space between paragraphs */
+      color: var(--text);
+    }
+
+    .bio p:last-of-type { margin-bottom: 0; } /* No extra space after the last paragraph */
+
+
+    /* ============================================================
+       SOCIAL LINKS (LinkedIn | Twitter | etc.)
+    ============================================================ */
+    .socials {
+      margin-top: 2.5rem;         /* ✏️ Space above social links */
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;                /* ✏️ Space between each link and separator */
+      flex-wrap: wrap;            /* Wraps to next line on small screens */
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;         /* ✏️ Social link text size */
+      color: var(--muted);
+      opacity: 0;
+      transform: translateY(14px);
+      animation: fadeUp 0.55s ease forwards 0.4s;
+    }
+
+    .socials a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+    .socials a:hover { color: var(--accent); }
+
+    .socials .sep {               /* The "|" dividers between links */
+      color: var(--border);       /* Very light color so they're subtle */
+      user-select: none;          /* Can't accidentally select them when copying */
+    }
+
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      max-width: 640px;           /* Same width as main content */
+      margin: 0 auto;
+      padding: 0 2rem 3rem;
+      border-top: 1px solid var(--border); /* Line above footer */
+      padding-top: 1.5rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;         /* ✏️ Footer text size */
+      color: var(--muted);
+      opacity: 0;
+      animation: fadeUp 0.4s ease forwards 0.55s;
+    }
+
+
+    /* ============================================================
+       FADE-IN ANIMATION
+       Elements start invisible (opacity:0, shifted down) and
+       animate to visible. The delay numbers above control order.
+    ============================================================ */
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+
+    /* ============================================================
+       MOBILE STYLES (screens narrower than 520px)
+       These override the rules above for small screens only.
+    ============================================================ */
+    @media (max-width: 520px) {         /* ✏️ Change 520px to adjust breakpoint */
+      nav { padding: 0 1.25rem; }       /* Less side padding in nav on mobile */
+      main { padding: 100px 1.25rem 60px; } /* Less padding in main content */
+      footer { padding: 1.5rem 1.25rem 2.5rem; }
+      .profile { gap: 1.25rem; }        /* Less gap between photo and name */
+      .profile-img { width: 58px; height: 58px; } /* Slightly smaller photo */
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       NAVIGATION BAR
+       ✏️ Edit the link text and href="#" URLs below.
+       Replace href="#" with a real URL like href="/reading.html"
+       or a full URL like href="https://example.com"
+  ============================================================ -->
+  <nav>
+    <a class="nav-logo" href="#">Umarkin</a>  <!-- ✏️ Your name/logo on the left -->
+    <ul class="nav-links">
+      <li><a href="#">somehing1</a></li>      <!-- ✏️ Nav link 1: change text and href -->
+      <li><a href="#">sonetub2</a></li>      <!-- ✏️ Nav link 2 -->
+      <li><a href="#">something3</a></li>       <!-- ✏️ Nav link 3 -->
+      <li><a href="#">something4</a></li>     <!-- ✏️ Nav link 4. Add/remove <li> items as needed. -->
+    </ul>
+  </nav>
+
+
+  <main>
+
+    <!-- ============================================================
+         PROFILE: photo + name + tagline
+    ============================================================ -->
+    <div class="profile">
+      <img
+        class="profile-img"
+        src="IMG_20250920_202346_758 (2).jpg"
+        alt="Umarjon Tashmukhamedov"
+        onerror="this.style.background='linear-gradient(135deg,#d4c5b0,#b8a99a)'; this.removeAttribute('src')"
+        
+      <div>
+        <h1 class="profile-name">Umarjon Tashmukhamedov</h1>  <!-- ✏️ Your full name -->
+        <p class="profile-tagline">Guiding, forging, existing .</p> <!-- ✏️ Your one-line tagline -->
+      </div>
+    </div>
+
+efwpjrwiepth[qerpighweri[ghes[oithwerihgeio[gherihgei[0
+    <!-- ============================================================
+         BIO: your paragraphs of text
+         ✏️ Edit, add, or remove <p>...</p> blocks freely.
+         To add a link inside text: <a href="URL">link text</a>
+         To italicize a word: <em>word</em>
+    ============================================================ -->
+    <div class="bio">
+      <p>Hi, i'm umarkin.</p>  <!-- ✏️ Opening line -->
+
+      
+    </div>
+
+
+    <!-- ============================================================
+         SOCIAL LINKS
+         ✏️ Change the href values to your own profile URLs.
+         To remove a link: delete the <a> and its neighboring <span class="sep">|</span>
+         To add a link: copy an existing <a> + <span> pair and paste it in.
+    ============================================================ -->
+    <div class="socials">
+      <a href="https://www.linkedin.com/in/umarkin/" target="_blank">LinkedIn</a>  <!-- ✏️ Your LinkedIn URL -->
+      <span class="sep">|</span>
+      <a href="https://www.linkedin.com/in/umarkin/" target="_blank">X1</a>                   <!-- ✏️ Your Twitter/X URL -->
+      <span class="sep">|</span>
+      <a href="https://www.linkedin.com/in/umarkin/" target="_blank">X2</a>                   <!-- ✏️ Your Telegram URL -->
+      <span class="sep">|</span>
+      <a href="https://www.linkedin.com/in/umarkin/" target="_blank">X3</a>             <!-- ✏️ Your GitHub URL -->
+      <span class="sep">|</span>
+      <a href="https://www.linkedin.com/in/umarkin/" target="_blank">44X</a>                 <!-- ✏️ Your Substack URL -->
+    </div>
+
+  </main>
+
+
+  <!-- ============================================================
+       FOOTER
+       ✏️ Change the copyright text to your name/year.
+  ============================================================ -->
+  <footer>
+    © umarkin  
+  </footer>
+
+</body>
+</html>
